@@ -24,6 +24,7 @@ def run_init(args):
         "OUTPUT_FILE"    : f"{task.path}/scripts/task_next_{task.task_id}.out",
         "ERROR_FILE"     : f"{task.path}/scripts/task_next_{task.task_id}.err",
         "JOB_NAME"      : f"next-{task.task_id}",
+        "PARTITION"      : "cpu-large",
     }
     
     if task.status==State.COMPLETED:
@@ -33,16 +34,19 @@ def run_init(args):
         task.status=State.RUNNING  
         # create the main script
         logger.info(f"Submitting main script for task {task.name}.")
-        job_id = task.submit()
+        job_id = task.submit(dry_run=args.dry_run)
         logger.info(f"Submitted task {task.name} with job ID {job_id}.")
         slurm_ops["DEPENDENCY"] = f"afterok:{job_id}"
     
     # create the closing script
     logger.info(f"Creating closing script for task {task.name}.")
     script = sbatch( f"{task.path}/scripts/close_task_{task.task_id}.sh", opts=slurm_ops , virtualenv=ctx.virtualenv )    
-    script += f"maestro run next --task-file {ctx.path}/tasks.json --index {task.task_id}"
+    command = f"maestro run next -t {ctx.path}/flow.json -i {task.task_id}"
+    script += command
     logger.info(f"Submitting closing script for task {task.name}.")
-    script.submit()
+    print(command)
+    if not args.dry_run:
+        script.submit()
         
     
 
@@ -72,14 +76,14 @@ def run_next(args):
                 next_task.status = State.CANCELED
                 cancel_task( next_task )
         logger.info(f"Task {task.name} failed. Canceling dependent tasks.")
-        cancel_task( task )      
+        if not args.dry_run:
+            cancel_task( task )      
     else:
         logger.info(f"Some jobs for task {task.name} failed, but within acceptable limits.")
         task.status = State.FINALIZED
         
-        
     # if the current task is failed, we need to cancel the entire graph
-    if task.status not in [State.COMPLETED, State.FINALIZED]:
+    if task.status in [State.COMPLETED, State.FINALIZED]:
         logger.info(f"Task {task.name} finalized successfully.")
         # need to start the other tasks that depend on this one
         for task in task.next:
@@ -87,12 +91,17 @@ def run_next(args):
                         "OUTPUT_FILE"    : f"{task.path}/scripts/task_{task.task_id}.out",
                         "ERROR_FILE"     : f"{task.path}/scripts/task_{task.task_id}.err",
                         "JOB_NAME"       : f"init-{task.task_id}",
+                        "PARTITION"      : "cpu-large",
+
                         }
             logger.info(f"Starting dependent task {task.name}.")
-            script = sbatch( f"{task.path}/scripts/init_task_{task.task_id}.sh", args = slurm_opts , virtualenv=ctx.virtualenv)
-            script += f"maestro run task -i {ctx.path}/tasks.json -x {task.task_id} "
+            script = sbatch( f"{task.path}/scripts/init_task_{task.task_id}.sh", opts = slurm_opts , virtualenv=ctx.virtualenv)
+            command = f"maestro run task -t {ctx.path}/flow.json -i {task.task_id}"
+            script += command
+            print(command)
             logger.info(f"Submitting initialization script for task {task.name}.")
-            script.submit()
+            if not args.dry_run:
+                script.submit()
     
 
 def task_parser():
@@ -103,6 +112,8 @@ def task_parser():
                         help="The task file input")
     parser.add_argument('--message-level', action='store', dest='message_level', required=False,
                         help="The logging message level", default="INFO", choices=["DEBUG","INFO","WARNING","ERROR","CRITICAL"])
+    parser.add_argument('--dry-run', action='store_true', dest='dry_run', required=False,
+                        help="Perform a dry run without executing any tasks.")
     return [parser]
 
 

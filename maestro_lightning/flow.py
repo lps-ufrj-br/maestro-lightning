@@ -91,7 +91,10 @@ class Session:
             for task in ctx.tasks.values():
                 if len(task.prev) == 0:
                     logger.info(f"Preparing task {task.name} for execution.")
-                    command = f"maestro run -t {self.path}/flow.json -i {task.task_id}"
+                    command = f"maestro run task -t {self.path}/flow.json -i {task.task_id}"
+                    if dry_run:
+                        command+=" --dry-run"
+                    print(command)
                     os.system(command)
             
           

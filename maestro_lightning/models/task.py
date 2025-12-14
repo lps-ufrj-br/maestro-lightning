@@ -208,7 +208,7 @@ class Task:
             return self.outputs_data[key].name
     
 
-    def submit(self) -> int:
+    def submit(self, dry_run : bool=False ) -> int:
             """
             Submits a job to the job scheduler.
 
@@ -236,11 +236,11 @@ class Task:
                             })
             script += f"source {ctx.virtualenv}/bin/activate"
             command = f"maestro run job"
-            command+= f" -i {self.path}/jobs/job_$SLURM_ARRAY_TASK_ID.json"
+            command+= f" -i {self.path}/jobs/inputs/job_$SLURM_ARRAY_TASK_ID.json"
             command+= f" -o {self.path}/works/job_$SLURM_ARRAY_TASK_ID"
-            command+= f" -d {ctx.path}/db/data.db"
+            print(command)
             script += command
-            job_id = script.submit() 
+            job_id = script.submit() if not dry_run else -1
             return int(job_id)
  
  

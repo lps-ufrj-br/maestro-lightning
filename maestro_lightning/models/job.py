@@ -62,6 +62,8 @@ class Job:
             self.command = command
             self.binds = binds
             self.envs = envs
+            self.job_status_path = f"{self.task_path}/jobs/status/job_{self.job_id}"
+
         
     def to_dict(self) -> Dict:
         """
@@ -158,15 +160,15 @@ class Job:
             with open( f"{self.task_path}/jobs/inputs/job_{self.job_id}.json", 'w') as f:
                     pprint(self.to_dict())
                     json.dump( self.to_dict() , f , indent=2)
-            with open( f"{self.task_path}/jobs/status/job_{self.job_id}.json", 'w') as f:
+            with open( f"{self.job_status_path}.json", 'w') as f:
                     json.dump(Status(State.ASSIGNED).to_dict(), f, indent=2)
     
 
     @property 
     def status(self) -> State:
-        if os.path.exists( f"{self.task_path}/jobs/status/job_{self.job_id}.json" ):
-            with FileLock( f"{self.task_path}/jobs/status/job_{self.job_id}.json.lock" ):
-                with open( f"{self.task_path}/jobs/status/job_{self.job_id}.json", 'r') as f:
+        if os.path.exists( f"{self.job_status_path}.json" ):
+            with FileLock( f"{self.job_status_path}.json.lock" ):
+                with open( f"{self.job_status_path}.json", 'r') as f:
                     data = json.load(f)
                     return Status.from_dict(data).status
         else:
@@ -175,38 +177,38 @@ class Job:
     @status.setter
     def status(self, new_status: State):
         status = Status(new_status)
-        with FileLock( f"{self.task_path}/jobs/status/job_{self.job_id}.json.lock" ):
-            with open( f"{self.task_path}/jobs/status/job_{self.job_id}.json", 'r') as f:
+        with FileLock( f"{self.job_status_path}.json.lock" ):
+            with open( f"{self.job_status_path}.json", 'r') as f:
                 data = json.load(f)
                 status = Status.from_dict(data)
             status.status=new_status
-            with open( f"{self.task_path}/jobs/status/job_{self.job_id}.json", 'w') as f:
+            with open( f"{self.job_status_path}.json", 'w') as f:
                 json.dump( status.to_dict() , f , indent=2)
      
                    
     def ping(self):
-        if os.path.exists( f"{self.task_path}/jobs/status/job_{self.job_id}.json" ):
-            with FileLock( f"{self.task_path}/jobs/status/job_{self.job_id}.json.lock" ):
-                with open( f"{self.task_path}/jobs/status/job_{self.job_id}.json", 'r') as f:
+        if os.path.exists( f"{self.job_status_path}.json" ):
+            with FileLock( f"{self.job_status_path}.json.lock" ):
+                with open( f"{self.job_status_path}.json", 'r') as f:
                     status = Status.from_dict(json.load(f))
                     status.ping()
-                with open( f"{self.task_path}/jobs/status/job_{self.job_id}.json", 'w') as f:
+                with open( f"{self.job_status_path}.json", 'w') as f:
                     json.dump(status.to_dict(), f, indent=2)
                     
     def is_alive(self) -> bool:
-        if os.path.exists( f"{self.task_path}/jobs/status/job_{self.job_id}.json" ):
-            with FileLock( f"{self.task_path}/jobs/status/job_{self.job_id}.json.lock" ):
-                with open( f"{self.task_path}/jobs/status/job_{self.job_id}.json", 'r') as f:
+        if os.path.exists( f"{self.job_status_path}.json" ):
+            with FileLock( f"{self.job_status_path}.json.lock" ):
+                with open( f"{self.job_status_path}.json", 'r') as f:
                     status = Status.from_dict(json.load(f))
                     return status.is_alive()
         else:
             return False
         
     def reset(self):
-        if os.path.exists( f"{self.task_path}/jobs/status/job_{self.job_id}.json" ):
-            with FileLock( f"{self.task_path}/jobs/status/job_{self.job_id}.json.lock" ):
-                with open( f"{self.task_path}/jobs/status/job_{self.job_id}.json", 'r') as f:
+        if os.path.exists( f"{self.job_status_path}.json" ):
+            with FileLock( f"{self.job_status_path}.json.lock" ):
+                with open( f"{self.job_status_path}.json", 'r') as f:
                     status = Status.from_dict(json.load(f))
                     status.reset()
-                with open( f"{self.task_path}/jobs/status/job_{self.job_id}.json", 'w') as f:
+                with open( f"{self.job_status_path}.json", 'w') as f:
                     json.dump(status.to_dict(), f, indent=2)
