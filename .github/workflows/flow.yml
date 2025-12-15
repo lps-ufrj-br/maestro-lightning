@@ -192,6 +192,10 @@ jobs:
           cd maestro-lightning && source activate.sh
           cd /tmp/flow_test
           ls -lisah
+          ls -lisah local_tasks
+          ls -lisah local_tasks/datasets
+          ls -lisah local_tasks/datasets/*/*
+          ls -lisah local_tasks/tasks
           maestro run task -t /tmp/flow_test/local_tasks/flow.json -i 1 --dry-run
 
       - name: Upload the folder as artifact 
