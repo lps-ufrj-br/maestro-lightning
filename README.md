@@ -12,6 +12,12 @@ Maestro Lightning is a repository to manage workloads and jobs in SLURM using a 
 - Add datasets 📊
 - Link images 🖼️
 
+## Requirements:
+
+- SLURM cluster
+- Singularity
+- Virtual environment
+
 ## Installation 📦
 
 To install Maestro Lightning from scrath:
