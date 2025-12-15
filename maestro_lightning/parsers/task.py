@@ -5,7 +5,7 @@ from loguru import logger
 from maestro_lightning import get_context
 from maestro_lightning import setup_logs
 from maestro_lightning.models import Dataset, Image, Task
-from maestro_lightning.flow import load, print_tasks, Flow
+from maestro_lightning.flow import load, print_tasks, retry_tasks, Flow
 
 
 def run_list(args):
@@ -16,6 +16,14 @@ def run_list(args):
     load( task_file , ctx)
     print_tasks(ctx)  
     
+
+def run_retry(args):
+    task_file = args.input_file+f"/flow.json"
+    setup_logs( name = f"task_list", level=args.message_level )
+    ctx = get_context( clear=True )
+    logger.info(f"Loading task file {task_file}.")
+    load( task_file , ctx)
+    retry_tasks(ctx, args.dry_run)
     
 def run_create(args):
     
@@ -41,6 +49,17 @@ def list_parser():
                         , help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Default is INFO.")
     return [parser]
    
+def retry_parser():
+    parser = argparse.ArgumentParser(description = '', add_help = False)
+
+    parser.add_argument('-i','--input', action='store', dest='input_file', required = True,
+                        help = "The job input file")
+    parser.add_argument("--message-level", action="store", dest="message_level", default="ERROR"
+                        , help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL). Default is INFO.")
+    parser.add_argument("--dry-run", action="store_true", dest="dry_run", default=False,
+                        help="Perform a dry run without executing the task.")
+    return [parser]
+   
 def create_parser():
     parser = argparse.ArgumentParser(description = '', add_help = False)
 
@@ -62,6 +81,8 @@ def create_parser():
                         help="The output directory for the task.")
     parser.add_argument("-n", "--name", action="store", dest="name", required=True,
                         help="The name of the task.")
+    parser.add_argument("--dry-run", action="store_true", dest="dry_run", default=False,
+                        help="Perform a dry run without executing the task.")
     return [parser] 
     
 

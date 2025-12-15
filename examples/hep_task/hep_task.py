@@ -6,7 +6,7 @@ from maestro_lightning import Flow, Task, Dataset, Image
 
 basepath         = os.getcwd()
 input_path       = f"{basepath}/jobs"
-number_of_events = 10
+number_of_events = 2
 number_of_jobs   = 2
 run_number       = 20251211
 image_path       = '/mnt/shared/storage03/projects/cern/data/images/lorenzetti_latest.sif'

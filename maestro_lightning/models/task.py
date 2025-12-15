@@ -144,6 +144,9 @@ class Task:
                         job = Job.from_dict(json.load(f))
                         self.jobs.append(job)
                     
+            self.task_status_path = f"{self.path}/status"
+
+                    
     @property
     def next(self) -> List['Task']:
         return self._next
@@ -185,7 +188,9 @@ class Task:
             os.makedirs(self.path + "/works"       , exist_ok=True)
             os.makedirs(self.path + "/jobs/inputs" , exist_ok=True)
             os.makedirs(self.path + "/jobs/status" , exist_ok=True)
-            os.makedirs(self.path + "/scripts"  , exist_ok=True)
+            os.makedirs(self.path + "/scripts"     , exist_ok=True)
+            os.makedirs(self.path + "/logs"        , exist_ok=True)
+            os.makedirs(self.path + "/status"      , exist_ok=True)
             self._create_status()
             self._update_jobs()   
 
@@ -207,6 +212,19 @@ class Task:
             """
             return self.outputs_data[key].name
     
+    def has_jobs(self) -> bool:
+            """
+            Checks if the current task has any associated jobs.
+
+            This method evaluates whether there are any jobs linked to the
+            current instance by checking the length of the jobs list.
+
+            Returns:
+                bool: True if there are jobs associated with the task, False otherwise.
+            """
+            self._update_jobs()   
+            return len(self.get_array_of_jobs_with_status()) > 0
+
 
     def submit(self, dry_run : bool=False ) -> int:
             """
@@ -226,6 +244,7 @@ class Task:
             
             ctx = get_context()
             self._update_jobs()   
+            
             script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", 
                             {
                                 "ARRAY"         : ",".join( [str(job_id) for job_id in self.get_array_of_jobs_with_status() ]),
@@ -289,7 +308,7 @@ class Task:
         )
         
     def _create_status(self):
-        with open( self.path + "/status.json", 'w') as f:
+        with open( self.task_status_path + "/status.json", 'w') as f:
             json.dump( Status(State.ASSIGNED).to_dict() , f , indent=2)
         
     def _update_jobs(self):
@@ -324,9 +343,9 @@ class Task:
         
     @property 
     def status(self) -> State:
-        if os.path.exists( f"{self.path}/status.json" ):
-            with FileLock( f"{self.path}/status.json.lock" ):
-                with open( f"{self.path}/status.json", 'r') as f:
+        if os.path.exists( f"{self.task_status_path}/status.json" ):
+            with FileLock( f"{self.task_status_path}/status.json.lock" ):
+                with open( f"{self.task_status_path}/status.json", 'r') as f:
                     data = json.load(f)
                     return Status.from_dict(data).status
         else:
@@ -334,12 +353,12 @@ class Task:
     
     @status.setter
     def status(self, new_status: State):
-        with FileLock( f"{self.path}/status.json.lock" ):
-            with open( f"{self.path}/status.json", 'r') as f:
+        with FileLock( f"{self.task_status_path}/status.json.lock" ):
+            with open( f"{self.task_status_path}/status.json", 'r') as f:
                 data = json.load(f)
                 status = Status.from_dict(data)
             status.status=new_status
-            with open( f"{self.path}/status.json", 'w') as f:
+            with open( f"{self.task_status_path}/status.json", 'w') as f:
                 json.dump( status.to_dict() , f , indent=2)
  
     def count(self) -> Dict[str, int]:

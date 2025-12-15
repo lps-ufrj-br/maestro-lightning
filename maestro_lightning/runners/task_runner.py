@@ -21,8 +21,8 @@ def run_init(args):
     task = tasks.get( args.index )
     
     slurm_ops = {
-        "OUTPUT_FILE"    : f"{task.path}/scripts/task_next_{task.task_id}.out",
-        "ERROR_FILE"     : f"{task.path}/scripts/task_next_{task.task_id}.err",
+        "OUTPUT_FILE"    : f"{task.path}/logs/task_end_{task.task_id}.out",
+        "ERROR_FILE"     : f"{task.path}/logs/task_end_{task.task_id}.err",
         "JOB_NAME"      : f"next-{task.task_id}",
         "PARTITION"      : "cpu-large",
     }
@@ -34,9 +34,10 @@ def run_init(args):
         task.status=State.RUNNING  
         # create the main script
         logger.info(f"Submitting main script for task {task.name}.")
-        job_id = task.submit(dry_run=args.dry_run)
-        logger.info(f"Submitted task {task.name} with job ID {job_id}.")
-        slurm_ops["DEPENDENCY"] = f"afterok:{job_id}"
+        if task.has_jobs():
+            job_id = task.submit(dry_run=args.dry_run)
+            logger.info(f"Submitted task {task.name} with job ID {job_id}.")
+            slurm_ops["DEPENDENCY"] = f"afterok:{job_id}"
     
     # create the closing script
     logger.info(f"Creating closing script for task {task.name}.")
@@ -88,8 +89,8 @@ def run_next(args):
         # need to start the other tasks that depend on this one
         for task in task.next:
             slurm_opts = {
-                        "OUTPUT_FILE"    : f"{task.path}/scripts/task_{task.task_id}.out",
-                        "ERROR_FILE"     : f"{task.path}/scripts/task_{task.task_id}.err",
+                        "OUTPUT_FILE"    : f"{task.path}/logs/task_begin_{task.task_id}.out",
+                        "ERROR_FILE"     : f"{task.path}/logs/task_begin_{task.task_id}.err",
                         "JOB_NAME"       : f"init-{task.task_id}",
                         "PARTITION"      : "cpu-large",
 

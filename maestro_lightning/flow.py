@@ -6,6 +6,7 @@ __all__ = [
     "print_datasets",
     "print_images",
     "print_tasks",
+    "retry_tasks",
 ]
 
 import os
@@ -14,7 +15,7 @@ import tempfile
 
 from loguru import logger
 from tabulate import tabulate
-from maestro_lightning.models import Context, Dataset, Image, Task
+from maestro_lightning.models import Context, Dataset, Image, Task, State
 from maestro_lightning import get_context, get_hash, setup_logs
 
 
@@ -92,8 +93,7 @@ class Session:
                 if len(task.prev) == 0:
                     logger.info(f"Preparing task {task.name} for execution.")
                     command = f"maestro run task -t {self.path}/flow.json -i {task.task_id}"
-                    if dry_run:
-                        command+=" --dry-run"
+                    command+=" --dry-run" if dry_run else ""
                     print(command)
                     os.system(command)
             
@@ -204,3 +204,21 @@ def print_tasks(ctx : Context):
     print(table)
     
          
+def retry_tasks(ctx : Context, dry_run : bool=False):
+    
+    logger.info(f"Retrying failed tasks in the flow: {ctx.path}")
+    for task in ctx.tasks.values():
+        if task.status != State.COMPLETED:
+            for job in task.jobs:
+                logger.info(f"Retrying job {job.job_id} of task {task.name}.")
+                if job.status != State.COMPLETED:
+                    job.status = State.ASSIGNED
+            task.status=State.ASSIGNED
+    
+    for task in ctx.tasks.values():
+        if len(task.prev) == 0:
+            logger.info(f"Preparing task {task.name} for execution.")
+            command = f"maestro run task -t {ctx.path}/flow.json -i {task.task_id}"
+            command+=" --dry-run" if dry_run else ""
+            print(command)
+            os.system(command)

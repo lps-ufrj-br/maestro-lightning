@@ -4,9 +4,9 @@ import sys
 import argparse
 
 from maestro_lightning import get_argparser_formatter
-from maestro_lightning.runners import job_parser, run_job
-from maestro_lightning.runners import task_parser, run_init, run_next
-from .task import list_parser, run_list, create_parser, run_create
+from maestro_lightning.runners.job_runner import job_parser, run_job
+from maestro_lightning.runners.task_runner import task_parser, run_init, run_next
+from .task import list_parser, run_list, create_parser, retry_parser, run_create, run_retry
 
 def build_argparser():
 
@@ -28,7 +28,7 @@ def build_argparser():
     task_parent = argparse.ArgumentParser(formatter_class=formatter_class, add_help=False, )
     option = task_parent.add_subparsers(dest='option')
     option.add_parser("create"   , parents = create_parser()    ,help='',formatter_class=formatter_class)
-    #option.add_parser("retry"    , parents = retry_parser()    ,help='',formatter_class=formatter_class)
+    option.add_parser("retry"    , parents = retry_parser()    ,help='',formatter_class=formatter_class)
     option.add_parser("list"   , parents = list_parser()    ,help='',formatter_class=formatter_class)
     mode.add_parser( "task", parents=[task_parent], help="",formatter_class=formatter_class)
 
@@ -47,6 +47,8 @@ def run_parser(args):
             run_list(args)
         elif args.option == "create":
             run_create(args)
+        elif args.option == "retry":
+            run_retry(args)
 
 def run():
 
