@@ -1,4 +1,6 @@
 
+[![maestro](https://github.com/lps-ufrj-br/maestro-lightning/actions/workflows/flow.yml/badge.svg)](https://github.com/lps-ufrj-br/maestro-lighning/actions/workflows/flow.yml)
+
 
 # Maestro Lightning 🚀
 

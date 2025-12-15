@@ -5,7 +5,7 @@ from maestro_lightning import Flow, Task, Dataset
 basepath = os.getcwd()
 input_path = f"{basepath}/jobs"
 os.makedirs(input_path, exist_ok=True)
-for i in range(5):
+for i in range(2):
     with open(f"{input_path}/job_{i}.json",'w') as f:
         d={'input': i}
         json.dump(d,f)

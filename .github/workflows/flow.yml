@@ -1,4 +1,4 @@
-name: Test reconstruction sequence
+name: Maestro Flow Test
 
 on: [push]
 
@@ -19,7 +19,7 @@ jobs:
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test 
           include-hidden-files: true
 
@@ -30,7 +30,7 @@ jobs:
       - name: Download the shared folder artifact
         uses: actions/download-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test
       
       - name: Install repository
@@ -51,7 +51,7 @@ jobs:
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test 
           overwrite: true 
           include-hidden-files: true
@@ -66,7 +66,7 @@ jobs:
       - name: Download the shared folder artifact
         uses: actions/download-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test
           include-hidden-files: true
       
@@ -88,7 +88,7 @@ jobs:
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test 
           overwrite: true 
           include-hidden-files: true
@@ -104,7 +104,7 @@ jobs:
       - name: Download the shared folder artifact
         uses: actions/download-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test
           include-hidden-files: true
       
@@ -126,7 +126,7 @@ jobs:
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test 
           overwrite: true 
           include-hidden-files: true
@@ -139,7 +139,7 @@ jobs:
       - name: Download the shared folder artifact
         uses: actions/download-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test
           include-hidden-files: true
       
@@ -161,7 +161,7 @@ jobs:
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test 
           overwrite: true 
           include-hidden-files: true
@@ -175,7 +175,7 @@ jobs:
       - name: Download the shared folder artifact
         uses: actions/download-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test
           include-hidden-files: true
       
@@ -197,7 +197,7 @@ jobs:
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test 
           overwrite: true 
           include-hidden-files: true
@@ -211,7 +211,7 @@ jobs:
       - name: Download the shared folder artifact
         uses: actions/download-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test
           include-hidden-files: true
       
@@ -234,7 +234,7 @@ jobs:
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test 
           overwrite: true 
           include-hidden-files: true
@@ -249,7 +249,7 @@ jobs:
       - name: Download the shared folder artifact
         uses: actions/download-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test
           include-hidden-files: true
       
@@ -272,7 +272,7 @@ jobs:
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
-          name: flow_artifact
+          name: flow_test_artifact
           path: /tmp/flow_test 
           overwrite: true 
           include-hidden-files: true
