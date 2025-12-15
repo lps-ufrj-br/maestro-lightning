@@ -63,29 +63,16 @@ jobs:
           name: flow_test_artifact
           path: /tmp
       
-      - name: Unzip folder artifact
-        shell: bash
-        run: |
-          unzip /tmp/flow_test.zip -d /tmp/flow_test
-
-      - name: Install repository
+      - name: Create task one
         shell: bash
         run: |
           pip install virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
-
-      - name: Create task one
-        shell: bash
-        run: |
-          cd maestro-lightning && source activate.sh
+          cd /tmp && unzip flow_test.zip -d /tmp/unpack && mv /tmp/unpack/flow_test /tmp/flow_test
           cd /tmp/flow_test
           maestro run task -t $PWD/local_tasks/flow.json -i 0 --dry-run
-
-      - name: Zip folder artifact
-        shell: bash
-        run: |
-          zip -r /tmp/flow_test.zip /tmp/flow_test
+          cd /tmp && zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
@@ -106,31 +93,18 @@ jobs:
         with:
           name: flow_test_artifact
           path: /tmp
-      
-      - name: Unzip folder artifact
-        shell: bash
-        run: |
-          unzip /tmp/flow_test.zip -d /tmp/flow_test
-      
-      - name: Install repository
+
+      - name: Run task one
         shell: bash
         run: |
           pip install virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
-
-      - name: Run task one
-        shell: bash
-        run: |
-          cd maestro-lightning && source activate.sh
+          cd /tmp && unzip flow_test.zip -d /tmp/unpack && mv /tmp/unpack/flow_test /tmp/flow_test
           cd /tmp/flow_test
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_1/jobs/inputs/job_0.json -o /tmp/flow_test/local_tasks/tasks/task_1/works/job_0
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_1/jobs/inputs/job_1.json -o /tmp/flow_test/local_tasks/tasks/task_1/works/job_1
-
-      - name: Zip folder artifact
-        shell: bash
-        run: |
-          zip -r /tmp/flow_test.zip /tmp/flow_test
+          cd /tmp && zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
@@ -149,31 +123,17 @@ jobs:
         with:
           name: flow_test_artifact
           path: /tmp
-      
-      - name: Unzip folder artifact
-        shell: bash
-        run: |
-          unzip /tmp/flow_test.zip -d /tmp/flow_test
-      
-      - name: Install repository
+
+      - name: Check task one
         shell: bash
         run: |
           pip install virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
-
-      - name: Check task one
-        shell: bash
-        run: |
-          cd maestro-lightning && source activate.sh
+          cd /tmp && unzip flow_test.zip -d /tmp/unpack && mv /tmp/unpack/flow_test /tmp/flow_test
           cd /tmp/flow_test
-          ls -lisah
           maestro run next -t /tmp/flow_test/local_tasks/flow.json -i 0 --dry-run
-
-      - name: Zip folder artifact
-        shell: bash
-        run: |
-          zip -r /tmp/flow_test.zip /tmp/flow_test
+          cd /tmp && zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
@@ -194,34 +154,16 @@ jobs:
           name: flow_test_artifact
           path: /tmp
       
-      - name: Unzip folder artifact
-        shell: bash
-        run: |
-          unzip /tmp/flow_test.zip -d /tmp/flow_test
-      
-      - name: Install repository
+      - name: Create task two
         shell: bash
         run: |
           pip install virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
-
-      - name: Create task two
-        shell: bash
-        run: |
-          cd maestro-lightning && source activate.sh
+          cd /tmp && unzip flow_test.zip -d /tmp/unpack && mv /tmp/unpack/flow_test /tmp/flow_test
           cd /tmp/flow_test
-          ls -lisah
-          ls -lisah local_tasks
-          ls -lisah local_tasks/datasets
-          ls -lisah local_tasks/datasets/*/*
-          ls -lisah local_tasks/tasks
           maestro run task -t /tmp/flow_test/local_tasks/flow.json -i 1 --dry-run
-
-      - name: Zip folder artifact
-        shell: bash
-        run: |
-          zip -r /tmp/flow_test.zip /tmp/flow_test
+          cd /tmp && zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
@@ -241,32 +183,18 @@ jobs:
         with:
           name: flow_test_artifact
           path: /tmp
-      
-      - name: Unzip folder artifact
-        shell: bash
-        run: |
-          unzip /tmp/flow_test.zip -d /tmp/flow_test
-      
-      - name: Install repository
+
+      - name: Run task two
         shell: bash
         run: |
           pip install virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
-
-      - name: Run task two
-        shell: bash
-        run: |
-          cd maestro-lightning && source activate.sh
-          cd /tmp/flow_test
+          cd /tmp && unzip flow_test.zip -d /tmp/unpack && mv /tmp/unpack/flow_test /tmp/flow_test
+          cd /tmp/flow_test          
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_2/jobs/inputs/job_0.json -o /tmp/flow_test/local_tasks/tasks/task_2/works/job_0
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_2/jobs/inputs/job_1.json -o /tmp/flow_test/local_tasks/tasks/task_2/works/job_1
-
-
-      - name: Zip folder artifact
-        shell: bash
-        run: |
-          zip -r /tmp/flow_test.zip /tmp/flow_test
+          cd /tmp && zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
@@ -288,31 +216,16 @@ jobs:
           name: flow_test_artifact
           path: /tmp
       
-      - name: Unzip folder artifact
-        shell: bash
-        run: |
-          unzip /tmp/flow_test.zip -d /tmp/flow_test
-      
-      - name: Install repository
+      - name: Check task two
         shell: bash
         run: |
           pip install virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
-
-      - name: Check task two
-        shell: bash
-        run: |
-          cd maestro-lightning && source activate.sh
-          cd /tmp/flow_test
-          ls -lisah
+          cd /tmp && unzip flow_test.zip -d /tmp/unpack && mv /tmp/unpack/flow_test /tmp/flow_test
+          cd /tmp/flow_test          
           maestro run next -t $PWD/local_tasks/flow.json -i 1 --dry-run
-
-
-      - name: Zip folder artifact
-        shell: bash
-        run: |
-          zip -r /tmp/flow_test.zip /tmp/flow_test
+          cd /tmp && zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
