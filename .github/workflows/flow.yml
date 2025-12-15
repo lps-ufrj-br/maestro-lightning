@@ -31,27 +31,59 @@ jobs:
         with:
           name: flow_artifact
           path: /tmp/flow_test
-      - name: Create flow
+      
+      - name: Install repository
         shell: bash
-        run: |
           pip install virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
+
+      - name: Create flow
+        shell: bash
+        run: |
           cd /tmp/flow_test
+          ls -lisah
           python run_tasks.py
-      - uses: actions/download-artifact@v4
+
+      - name: Upload the folder as artifact 
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test 
+
 
 
   create_task_one:
     runs-on: ubuntu-latest
     needs: flow
     steps:
+
+      - name: Download the shared folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test
+      
+      - name: Install repository
+        shell: bash
+          pip install virtualenv
+          git clone https://github.com/lps-ufrj-br/maestro-lightning.git
+          cd maestro-lightning && source activate.sh
+
       - name: Create task one
         shell: bash
         run: |
-          cd maestro-lightning && source activate.sh
-          cd ci_test/flow 
+          cd /tmp/flow_test
+          ls -lisah
           maestro run task -t $PWD/local_tasks/flow.json -i 0 --dry-run
+
+      - name: Upload the folder as artifact 
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test 
+
+
     
 
   run_task_one:
