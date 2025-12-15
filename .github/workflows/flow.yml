@@ -36,6 +36,8 @@ jobs:
         shell: bash
         run: |
           chmod +r /tmp/flow_test.zip 
+          ls -lisah /tmp 
+          ls -lisah /tmp/flow_test.zip
           unzip /tmp/flow_test.zip -d /tmp/flow_test
 
       - name: Install repository
