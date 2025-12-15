@@ -12,7 +12,7 @@ jobs:
         run: |
           mkdir /tmp/flow_test && cd /tmp/flow_test 
           rm -rf *
-          pip install virtualenv
+          pip install -y virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
       - name: Upload the folder as artifact 
@@ -33,8 +33,10 @@ jobs:
       - name: Create flow
         shell: bash
         run: |
+          pip install -y virtualenv
           cd /tmp/flow_test
-          cd maestro-lightning && source activate.sh
+          ls -lisah
+          cd maestro-lightning && ls && source activate.sh
           cd ci_test/flow 
           python run_tasks.py
       - uses: actions/download-artifact@v4
