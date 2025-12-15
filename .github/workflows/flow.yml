@@ -16,11 +16,17 @@ jobs:
           cd maestro-lightning && source activate.sh
           cp -r ci_test/flow/* /tmp/flow_test 
 
+      - name: Zip folder artifact
+        shell: bash
+        run: |
+          zip -r /tmp/flow_test.zip /tmp/flow_test
+
+
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test 
+          path: /tmp/flow_test.zip
           include-hidden-files: true
 
   flow:
@@ -31,8 +37,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test
+          path: /tmp/flow_test.zip
       
+      - name: Unzip folder artifact
+        shell: bash
+        run: |
+          unzip /tmp/flow_test.zip -d /tmp/
+
       - name: Install repository
         shell: bash
         run: |
@@ -48,11 +59,16 @@ jobs:
           ls -lisah
           python run_tasks.py
 
+      - name: Zip folder artifact
+        shell: bash
+        run: |
+          zip -r /tmp/flow_test.zip /tmp/flow_test
+
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test 
+          path: /tmp/flow_test.zip
           overwrite: true 
           include-hidden-files: true
 
