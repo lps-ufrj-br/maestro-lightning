@@ -42,6 +42,7 @@ jobs:
       - name: Create flow
         shell: bash
         run: |
+          cd maestro-lightning && source activate.sh
           cd /tmp/flow_test
           ls -lisah
           python run_tasks.py
@@ -75,6 +76,7 @@ jobs:
       - name: Create task one
         shell: bash
         run: |
+          cd maestro-lightning && source activate.sh
           cd /tmp/flow_test
           ls -lisah
           maestro run task -t $PWD/local_tasks/flow.json -i 0 --dry-run
