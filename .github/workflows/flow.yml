@@ -115,10 +115,6 @@ jobs:
         run: |
           cd maestro-lightning && source activate.sh
           cd /tmp/flow_test
-          ls -lisah
-          ls -lisah local_tasks
-          ls -lisah local_tasks/tasks
-          ls -lisah local_tasks/datasets
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_1/jobs/inputs/job_0.json -o /tmp/flow_test/local_tasks/tasks/task_1/works/job_0
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_1/jobs/inputs/job_1.json -o /tmp/flow_test/local_tasks/tasks/task_1/works/job_1
 
@@ -189,7 +185,6 @@ jobs:
           ls -lisah
           maestro run task -t /tmp/flow_test/local_tasks/flow.json -i 1 --dry-run
 
-
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
@@ -221,7 +216,6 @@ jobs:
         run: |
           cd maestro-lightning && source activate.sh
           cd /tmp/flow_test
-          ls -lisah
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_2/jobs/inputs/job_0.json -o /tmp/flow_test/local_tasks/tasks/task_2/works/job_0
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_2/jobs/inputs/job_1.json -o /tmp/flow_test/local_tasks/tasks/task_2/works/job_1
 
