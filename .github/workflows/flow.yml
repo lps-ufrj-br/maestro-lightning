@@ -37,9 +37,7 @@ jobs:
       - name: Unzip folder artifact
         shell: bash
         run: |
-          cd /tmp
-          ls -lisah
-          unzip flow_test.zip
+          cd /tmp && unzip flow_test.zip
 
       - name: Install repository
         shell: bash
@@ -53,7 +51,6 @@ jobs:
         run: |
           cd maestro-lightning && source activate.sh
           cd /tmp/flow_test
-          ls -lisah
           python run_tasks.py
 
       - name: Zip folder artifact
@@ -67,7 +64,6 @@ jobs:
           name: flow_test_artifact
           path: /tmp/flow_test.zip
           overwrite: true 
-          include-hidden-files: true
 
 
 
