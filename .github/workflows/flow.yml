@@ -14,8 +14,7 @@ jobs:
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
           cp -r .github/workflows/tests/flow /tmp/flow_test 
-          cd tmp
-          zip -r flow_test.zip flow_test
+          cd /tmp && zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
@@ -40,10 +39,9 @@ jobs:
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
           cd /tmp && unzip flow_test.zip -d /tmp/unpack && mv /tmp/unpack/flow_test /tmp/flow_test
-          ls -lisah
           cd /tmp/flow_test
           python run_tasks.py
-          zip -r /tmp/flow_test.zip /tmp/flow_test
+          cd /tmp && zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
