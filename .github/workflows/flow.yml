@@ -32,6 +32,12 @@ jobs:
           name: flow_test_artifact
           path: /tmp/flow_test.zip
       
+      - name: Unzip folder artifact
+        shell: bash
+        run: |
+          chmod +r /tmp/flow_test.zip 
+          unzip /tmp/flow_test.zip -d /tmp/flow_test
+
       - name: Install repository
         shell: bash
         run: |
@@ -43,7 +49,6 @@ jobs:
         shell: bash
         run: |
           cd maestro-lightning && source activate.sh
-          unzip /tmp/flow_test.zip -d /tmp/flow_test
           cd /tmp/flow_test
           python run_tasks.py
 
