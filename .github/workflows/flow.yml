@@ -37,7 +37,7 @@ jobs:
       - name: Unzip folder artifact
         shell: bash
         run: |
-          cd /tmp && unzip flow_test.zip
+          cd /tmp && unzip flow_test.zip -d /tmp/flow_test
 
       - name: Install repository
         shell: bash
