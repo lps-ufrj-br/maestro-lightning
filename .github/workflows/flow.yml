@@ -38,7 +38,7 @@ jobs:
           pip install virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh && cd /tmp
-          unzip /tmp/flow_test.zip
+          unzip flow_test.zip
           ls -lisah
           cd /tmp/flow_test
           ls -lisah
