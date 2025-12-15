@@ -44,8 +44,8 @@ jobs:
         run: |
           cd /tmp
           ls -lisah
-          unzip flow_test.zip
-          
+          unzip /tmp/flow_test.zip /tmp/flow_test
+
       - name: Install repository
         shell: bash
         run: |
