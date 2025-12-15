@@ -39,7 +39,7 @@ jobs:
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
           cd /tmp
-          mkdir flow_test && unzip flow_test.zip -d flow_test
+          unzip flow_test.zip -d $PWD
           ls -lisah
           cd /tmp/flow_test
           ls -lisah
