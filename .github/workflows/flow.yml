@@ -14,7 +14,8 @@ jobs:
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
           cp -r ci_test/flow /tmp/flow_test 
-          zip -r /tmp/flow_test.zip /tmp/flow_test
+          cd /tmp
+          zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
