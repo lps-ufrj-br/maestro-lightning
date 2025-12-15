@@ -22,14 +22,14 @@ with Flow(name="local_provider", path=f"{basepath}/local_tasks") as session:
 
     command = f"python3 {basepath}/app.py --job %IN --output %OUT"
 
-    binds = {"/mnt/cern_data" : "/mnt/cern_data"}
+    binds = {"/mnt/shared/storage03" : "/mnt/shared/storage03"}
 
     task_1 = Task(name="example_task_1",
                   image=image,
                   command=command,
                   input_data=input_dataset_1,
                   outputs={'OUT':'output.json'},
-                  partition='gpu',
+                  partition='cpu-large',
                   binds=binds)
     
     #task_2 = Task(name="example_task_2",
