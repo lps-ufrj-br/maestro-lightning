@@ -4,9 +4,9 @@ import sys
 import argparse
 
 from maestro_lightning import get_argparser_formatter
-from .parsers.job_runner import job_parser, run_job
-from .parsers.task_runner import task_parser, run_init, run_next
-from .parsers.task import list_parser, run_list, create_parser, run_create
+from maestro_lightning.runners import job_parser, run_job
+from maestro_lightning.runners import task_parser, run_init, run_next
+from .task import list_parser, run_list, create_parser, run_create
 
 def build_argparser():
 
