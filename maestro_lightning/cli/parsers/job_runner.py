@@ -73,10 +73,10 @@ def run_job( args ):
         logger.info(f"preparing output file {filename} for dataset {dataset.name}...")
         targetpath = dataset.path
         filename, extension = os.path.splitext( filename )
-        filename = f"{workarea}/{filename}.{job_id}{extension}"
-        command = command.replace(f"%{key}", filename)
+        filename = f"{filename}.{job_id}{extension}"
         targetpath = f"{targetpath}/{filename}"
         sourcepath = f"{workarea}/{filename}"
+        command = command.replace(f"%{key}", sourcepath)
         outputs.append( (sourcepath, targetpath) )
         
     entrypoint = f"{workarea}/entrypoint.sh"
