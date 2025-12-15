@@ -36,8 +36,11 @@ jobs:
           pip install virtualenv
           cd /tmp/flow_test
           ls -lisah
-          cd maestro-lightning && ls && source activate.sh
+          cd maestro-lightning
+          ls -lisah
+          source activate.sh
           cd ci_test/flow 
+          ls -lisah
           python run_tasks.py
       - uses: actions/download-artifact@v4
 
