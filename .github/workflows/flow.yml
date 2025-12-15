@@ -96,59 +96,175 @@ jobs:
     runs-on: ubuntu-latest
     needs: create_task_one
     steps:
+
+      - name: Download the shared folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test
+      
+      - name: Install repository
+        shell: bash
+        run: |
+          pip install virtualenv
+          git clone https://github.com/lps-ufrj-br/maestro-lightning.git
+          cd maestro-lightning && source activate.sh
+
       - name: Run task one
         shell: bash
         run: |
           cd maestro-lightning && source activate.sh
-          cd ci_test/flow 
+          cd /tmp/flow_test
+          ls -lisah
           maestro run job -i $PWD/local_tasks/tasks/task_1/jobs/inputs/job_0.json -o $PWD/local_tasks/tasks/task_1/works/job_0
           maestro run job -i $PWD/local_tasks/tasks/task_1/jobs/inputs/job_1.json -o $PWD/local_tasks/tasks/task_1/works/job_1
 
-    
+      - name: Upload the folder as artifact 
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test 
+          overwrite: true 
+
+
   check_task_one:
     runs-on: ubuntu-latest
     needs: run_task_one
     steps:
+      - name: Download the shared folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test
+      
+      - name: Install repository
+        shell: bash
+        run: |
+          pip install virtualenv
+          git clone https://github.com/lps-ufrj-br/maestro-lightning.git
+          cd maestro-lightning && source activate.sh
+
       - name: Check task one
         shell: bash
         run: |
           cd maestro-lightning && source activate.sh
-          cd ci_test/flow 
+          cd /tmp/flow_test
+          ls -lisah
           maestro run next -t $PWD/local_tasks/flow.json -i 0 --dry-run
+
+      - name: Upload the folder as artifact 
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test 
+          overwrite: true 
+
+    
 
   create_task_two:
     runs-on: ubuntu-latest
     needs: check_task_one
     steps:
+      - name: Download the shared folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test
+      
+      - name: Install repository
+        shell: bash
+        run: |
+          pip install virtualenv
+          git clone https://github.com/lps-ufrj-br/maestro-lightning.git
+          cd maestro-lightning && source activate.sh
+
       - name: Create task two
         shell: bash
         run: |
           cd maestro-lightning && source activate.sh
-          cd ci_test/flow 
+          cd /tmp/flow_test
+          ls -lisah
           maestro run task -t $PWD/local_tasks/flow.json -i 1 --dry-run
+
+
+      - name: Upload the folder as artifact 
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test 
+          overwrite: true 
+
 
  
   run_task_two:
     runs-on: ubuntu-latest
     needs: create_task_two
     steps:
+      - name: Download the shared folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test
+      
+      - name: Install repository
+        shell: bash
+        run: |
+          pip install virtualenv
+          git clone https://github.com/lps-ufrj-br/maestro-lightning.git
+          cd maestro-lightning && source activate.sh
+
       - name: Run task two
         shell: bash
         run: |
           cd maestro-lightning && source activate.sh
-          cd ci_test/flow 
+          cd /tmp/flow_test
+          ls -lisah
           maestro run job -i $PWD/local_tasks/tasks/task_2/jobs/inputs/job_0.json -o $PWD/local_tasks/tasks/task_2/works/job_0
           maestro run job -i $PWD/local_tasks/tasks/task_2/jobs/inputs/job_1.json -o $PWD/local_tasks/tasks/task_2/works/job_1
+
+
+      - name: Upload the folder as artifact 
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test 
+          overwrite: true 
+
+
 
     
   check_task_two:
     runs-on: ubuntu-latest
     needs: run_task_two
     steps:
+      - name: Download the shared folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test
+      
+      - name: Install repository
+        shell: bash
+        run: |
+          pip install virtualenv
+          git clone https://github.com/lps-ufrj-br/maestro-lightning.git
+          cd maestro-lightning && source activate.sh
+
       - name: Check task two
         shell: bash
         run: |
           cd maestro-lightning && source activate.sh
-          cd ci_test/flow 
+          cd /tmp/flow_test
+          ls -lisah
           maestro run next -t $PWD/local_tasks/flow.json -i 1 --dry-run
+
+
+      - name: Upload the folder as artifact 
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow_artifact
+          path: /tmp/flow_test 
+          overwrite: true 
+
+
 
