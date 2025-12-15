@@ -10,24 +10,17 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          mkdir /tmp/flow_test
           pip install virtualenv
           git clone https://github.com/lps-ufrj-br/maestro-lightning.git
           cd maestro-lightning && source activate.sh
-          cp -r ci_test/flow/* /tmp/flow_test 
-
-      - name: Zip folder artifact
-        shell: bash
-        run: |
+          cp -r ci_test/flow /tmp/flow_test 
           zip -r /tmp/flow_test.zip /tmp/flow_test
-
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
           name: flow_test_artifact
           path: /tmp/flow_test.zip
-          include-hidden-files: true
 
   flow:
     runs-on: ubuntu-latest
