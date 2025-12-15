@@ -15,6 +15,7 @@ jobs:
           cd maestro-lightning && source activate.sh
           cp -r ci_test/flow /tmp/flow_test 
           cd /tmp
+          ls -lisah
           zip -r flow_test.zip flow_test
 
       - name: Upload the folder as artifact 
