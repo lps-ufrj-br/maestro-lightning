@@ -28,6 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+
+      - name: BEFORE
+        shell: bash
+        run: |
+          cd /tmp && ls -lisah
+
+
       - name: Download the shared folder artifact
         uses: actions/download-artifact@v4
         with:
