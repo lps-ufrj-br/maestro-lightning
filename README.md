@@ -1,8 +1,8 @@
 
 [![maestro](https://github.com/lps-ufrj-br/maestro-lightning/actions/workflows/flow.yml/badge.svg)](https://github.com/lps-ufrj-br/maestro-lighning/actions/workflows/flow.yml)
+[![pages](https://github.com/lps-ufrj-br/maestro-lightning/actions/workflows/pages.yml/badge.svg)](https://github.com/lps-ufrj-br/maestro-lightning/actions/workflows/pages.yml)
 
-
-# Maestro Lightning 🚀
+# Maestro Lightning ([WebPage](https://lps-ufrj-br.github.io/maestro-lightning/))🚀
 
 Maestro Lightning is a repository to manage workloads and jobs in SLURM using a Pythonic approach. 
 
