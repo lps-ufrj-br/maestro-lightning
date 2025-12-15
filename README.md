@@ -30,27 +30,14 @@ pip install maestro-lightning
 
 To create and run a simple workflow using Maestro Lightning, follow the example below:
 
-
-### Create a simple job:
-```python
-import os, json
-basepath = os.getcwd()
-input_path = f"{basepath}/input_data"
-os.makedirs(input_path, exist_ok=True)
-for i in range(20):
-    with open(f"{input_path}/{i}.json",'w') as f:
-        d={'a':i*10,'b':i*2}
-        json.dump(d,f)
-```
-
 ### Create a simple flow:
 ```python
 from maestro_lightning import Flow, Task, Dataset, Image
 
 with Flow(name="local_provider", path=f"{basepath}/local_tasks") as session:
-    input_dataset    = Dataset(name="input_data", path=f"{basepath}/input_data")
-    image            = Image(name="python", path=f"{basepath}/python3.10.sif")
-    command          = f"python3 {basepath}/app.py --job %IN --output %OUT"
+    input_dataset    = Dataset(name="input_data", path="path/to/jobs")
+    image            = Image(name="python", path=f"/path/to/image.sif")
+    command          = f"python3 /path/to/script.py --job %IN --output %OUT"
     task_1 = Task(name="example_task_1",
                   image=image,
                   command=command,
@@ -60,3 +47,7 @@ with Flow(name="local_provider", path=f"{basepath}/local_tasks") as session:
                   )
     session.run()
 ```
+
+### How to run a large sequence?
+
+* [Reconstruction sequence for HEP problems](docs/How_to_run_the_sequence.html)
