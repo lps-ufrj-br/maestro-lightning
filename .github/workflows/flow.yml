@@ -35,9 +35,6 @@ jobs:
       - name: Unzip folder artifact
         shell: bash
         run: |
-          chmod +r /tmp/flow_test.zip 
-          ls -lisah /tmp 
-          ls -lisah /tmp/flow_test.zip
           unzip /tmp/flow_test.zip -d /tmp/flow_test
 
       - name: Install repository
@@ -77,9 +74,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test
-          include-hidden-files: true
+          path: /tmp
       
+      - name: Unzip folder artifact
+        shell: bash
+        run: |
+          unzip /tmp/flow_test.zip -d /tmp/flow_test
+
       - name: Install repository
         shell: bash
         run: |
@@ -92,17 +93,19 @@ jobs:
         run: |
           cd maestro-lightning && source activate.sh
           cd /tmp/flow_test
-          ls -lisah
           maestro run task -t $PWD/local_tasks/flow.json -i 0 --dry-run
+
+      - name: Zip folder artifact
+        shell: bash
+        run: |
+          zip -r /tmp/flow_test.zip /tmp/flow_test
 
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test 
+          path: /tmp/flow_test.zip
           overwrite: true 
-          include-hidden-files: true
-
 
     
 
@@ -115,8 +118,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test
-          include-hidden-files: true
+          path: /tmp
+      
+      - name: Unzip folder artifact
+        shell: bash
+        run: |
+          unzip /tmp/flow_test.zip -d /tmp/flow_test
       
       - name: Install repository
         shell: bash
@@ -133,13 +140,17 @@ jobs:
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_1/jobs/inputs/job_0.json -o /tmp/flow_test/local_tasks/tasks/task_1/works/job_0
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_1/jobs/inputs/job_1.json -o /tmp/flow_test/local_tasks/tasks/task_1/works/job_1
 
+      - name: Zip folder artifact
+        shell: bash
+        run: |
+          zip -r /tmp/flow_test.zip /tmp/flow_test
+
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test 
+          path: /tmp/flow_test.zip
           overwrite: true 
-          include-hidden-files: true
 
 
   check_task_one:
@@ -150,8 +161,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test
-          include-hidden-files: true
+          path: /tmp
+      
+      - name: Unzip folder artifact
+        shell: bash
+        run: |
+          unzip /tmp/flow_test.zip -d /tmp/flow_test
       
       - name: Install repository
         shell: bash
@@ -168,13 +183,17 @@ jobs:
           ls -lisah
           maestro run next -t /tmp/flow_test/local_tasks/flow.json -i 0 --dry-run
 
+      - name: Zip folder artifact
+        shell: bash
+        run: |
+          zip -r /tmp/flow_test.zip /tmp/flow_test
+
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test 
+          path: /tmp/flow_test.zip
           overwrite: true 
-          include-hidden-files: true
 
     
 
@@ -186,8 +205,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test
-          include-hidden-files: true
+          path: /tmp
+      
+      - name: Unzip folder artifact
+        shell: bash
+        run: |
+          unzip /tmp/flow_test.zip -d /tmp/flow_test
       
       - name: Install repository
         shell: bash
@@ -208,13 +231,17 @@ jobs:
           ls -lisah local_tasks/tasks
           maestro run task -t /tmp/flow_test/local_tasks/flow.json -i 1 --dry-run
 
+      - name: Zip folder artifact
+        shell: bash
+        run: |
+          zip -r /tmp/flow_test.zip /tmp/flow_test
+
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test 
+          path: /tmp/flow_test.zip
           overwrite: true 
-          include-hidden-files: true
 
 
  
@@ -226,8 +253,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test
-          include-hidden-files: true
+          path: /tmp
+      
+      - name: Unzip folder artifact
+        shell: bash
+        run: |
+          unzip /tmp/flow_test.zip -d /tmp/flow_test
       
       - name: Install repository
         shell: bash
@@ -245,13 +276,17 @@ jobs:
           maestro run job -i /tmp/flow_test/local_tasks/tasks/task_2/jobs/inputs/job_1.json -o /tmp/flow_test/local_tasks/tasks/task_2/works/job_1
 
 
+      - name: Zip folder artifact
+        shell: bash
+        run: |
+          zip -r /tmp/flow_test.zip /tmp/flow_test
+
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test 
+          path: /tmp/flow_test.zip
           overwrite: true 
-          include-hidden-files: true
 
 
 
@@ -264,8 +299,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test
-          include-hidden-files: true
+          path: /tmp
+      
+      - name: Unzip folder artifact
+        shell: bash
+        run: |
+          unzip /tmp/flow_test.zip -d /tmp/flow_test
       
       - name: Install repository
         shell: bash
@@ -283,13 +322,17 @@ jobs:
           maestro run next -t $PWD/local_tasks/flow.json -i 1 --dry-run
 
 
+      - name: Zip folder artifact
+        shell: bash
+        run: |
+          zip -r /tmp/flow_test.zip /tmp/flow_test
+
       - name: Upload the folder as artifact 
         uses: actions/upload-artifact@v4
         with:
           name: flow_test_artifact
-          path: /tmp/flow_test 
+          path: /tmp/flow_test.zip
           overwrite: true 
-          include-hidden-files: true
 
 
 
