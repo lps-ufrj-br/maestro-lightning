@@ -244,7 +244,6 @@ class Task:
             
             ctx = get_context()
             self._update_jobs()   
-            
             script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", 
                             {
                                 "ARRAY"         : ",".join( [str(job_id) for job_id in self.get_array_of_jobs_with_status() ]),
@@ -252,6 +251,9 @@ class Task:
                                 "ERROR_FILE"    : f"{self.path}/works/job_%a/output.err",
                                 "PARTITION"     : self.partition,
                                 "JOB_NAME"      : f"run-{self.task_id}",
+                                #"NTASKS"        : 1,
+                                "EXCLUSIVE"     : True
+                                
                             })
             script += f"source {ctx.virtualenv}/bin/activate"
             command = f"maestro run job"

@@ -67,6 +67,7 @@ slurm_opts = {
     "MEM"                   : (True, "--mem="),
     "MEM_PER_CPU"           : (True, "--mem-per-cpu="),
     "GRES"                  : (True, "--gres="),
+    "EXCLUSIVE"             : (False, "--exclusive"),            
 }
 
 class sbatch:
@@ -120,6 +121,7 @@ class sbatch:
         """
         command = f"sbatch {self.path}"
         self.dump()
+        logger.info(f"File written to {self.path}")
         logger.info(f"Submitting job...")
         with open(self.path, 'r') as f:
             for line in f:

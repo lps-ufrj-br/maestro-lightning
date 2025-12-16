@@ -97,18 +97,23 @@ def run_job( args ):
         command = command.replace('  ',' ') 
 
         envs = {}
+        pprint(os.environ)
         envs["JOB_ID"]               = f"{job_id}"
         envs["JOB_WORKAREA"]         = workarea 
         envs["TF_CPP_MIN_LOG_LEVEL"] = "3"
         envs["CUDA_VISIBLE_ORDER"]   = "PCI_BUS_ID"
         envs["CUDA_VISIBLE_DEVICES"] = os.environ.get("CUDA_VISIBLE_DEVICES","-1")
-        envs["OMP_NUM_THREADS"]      = os.environ.get("SLURM_CPUS_PER_TASK", '4')
+        envs["OMP_NUM_THREADS"]      = os.environ.get("SLURM_CPUS_PER_NODE", '4')
         envs["SLURM_CPUS_PER_TASK"]  = envs["OMP_NUM_THREADS"]
         envs["SLURM_MEM_PER_NODE"]   = os.environ.get("SLURM_MEM_PER_NODE", '2048')
         envs.update(job.envs)
         pprint(envs)
         logger.info("🚀 run job!")   
         logger.info(f"command: {command}")
+        
+        import joblib
+        n_cpus = joblib.cpu_count()
+        print("AKI JOAO!!!!! N_CPUS DETECTED:", n_cpus)
         
         logger.info("starting the process...")
         proc = Popen(command, envs = envs)
