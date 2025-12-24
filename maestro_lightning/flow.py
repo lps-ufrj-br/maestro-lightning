@@ -6,7 +6,6 @@ __all__ = [
     "print_datasets",
     "print_images",
     "print_tasks",
-    "retry_tasks",
 ]
 
 import os
@@ -192,33 +191,15 @@ def print_tasks(ctx : Context):
     logger.info("Current tasks in the flow:")
     rows  = []
     for task in ctx.tasks.values():
-        row = [task.name]
+        row = [task.name, task.task_id]
         count = task.count()
         row.extend( [value for value in count.values()])
         row.extend([task.status.value])
         rows.append(row)
-    cols = ['taskname']
+    cols = ['taskname','task_id']
     cols.extend([name for name in count.keys()])
     cols.extend(["status"])
     table = tabulate(rows ,headers=cols, tablefmt="psql")
     print(table)
     
          
-def retry_tasks(ctx : Context, dry_run : bool=False):
-    
-    logger.info(f"Retrying failed tasks in the flow: {ctx.path}")
-    for task in ctx.tasks.values():
-        if task.status != State.COMPLETED:
-            for job in task.jobs:
-                logger.info(f"Retrying job {job.job_id} of task {task.name}.")
-                if job.status != State.COMPLETED:
-                    job.status = State.ASSIGNED
-            task.status=State.ASSIGNED
-    
-    for task in ctx.tasks.values():
-        if len(task.prev) == 0:
-            logger.info(f"Preparing task {task.name} for execution.")
-            command = f"maestro run task -t {ctx.path}/flow.json -i {task.task_id}"
-            command+=" --dry-run" if dry_run else ""
-            print(command)
-            os.system(command)

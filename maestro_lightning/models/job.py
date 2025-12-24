@@ -166,6 +166,7 @@ class Job:
 
     @property 
     def status(self) -> State:
+        
         if os.path.exists( f"{self.job_status_path}.json" ):
             with FileLock( f"{self.job_status_path}.json.lock" ):
                 with open( f"{self.job_status_path}.json", 'r') as f:

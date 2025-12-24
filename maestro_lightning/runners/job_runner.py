@@ -110,10 +110,7 @@ def run_job( args ):
         pprint(envs)
         logger.info("🚀 run job!")   
         logger.info(f"command: {command}")
-        
-        import joblib
-        n_cpus = joblib.cpu_count()
-        print("AKI JOAO!!!!! N_CPUS DETECTED:", n_cpus)
+   
         
         logger.info("starting the process...")
         proc = Popen(command, envs = envs)
@@ -124,7 +121,7 @@ def run_job( args ):
         job.status = State.RUNNING
         while proc.is_alive():
             sleep(10)
-            job.ping()
+            #job.ping()
     except:
         traceback.print_exc()
         logger.error("error during the job execution.")

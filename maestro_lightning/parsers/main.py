@@ -6,7 +6,9 @@ import argparse
 from maestro_lightning import get_argparser_formatter
 from maestro_lightning.runners.job_runner import job_parser, run_job
 from maestro_lightning.runners.task_runner import task_parser, run_init, run_next
-from .task import list_parser, run_list, create_parser, retry_parser, run_create, run_retry
+from .task import list_parser, run_list, create_parser, retry_parser, run_create, run_retry, list_jobs, list_jobs_parser
+from .task import change_jobs_status, change_jobs_status_parser, change_task_status_parser, change_task_status
+from .task import reset_task, reset_task_parser
 
 def build_argparser():
 
@@ -32,6 +34,14 @@ def build_argparser():
     option.add_parser("list"   , parents = list_parser()    ,help='',formatter_class=formatter_class)
     mode.add_parser( "task", parents=[task_parent], help="",formatter_class=formatter_class)
 
+    expert_parent = argparse.ArgumentParser(formatter_class=formatter_class, add_help=False, )
+    option = expert_parent.add_subparsers(dest='option')
+    option.add_parser("list-jobs"           , parents = list_jobs_parser()    ,help='',formatter_class=formatter_class)
+    option.add_parser("change-jobs-status"  , parents = change_jobs_status_parser()    ,help='',formatter_class=formatter_class)
+    option.add_parser("change-task-status"  , parents = change_task_status_parser()   ,help='',formatter_class=formatter_class)
+    option.add_parser("reset-task"          , parents = reset_task_parser()   ,help='',formatter_class=formatter_class)
+    mode.add_parser( "expert", parents=[expert_parent], help="",formatter_class=formatter_class)
+
     return parser
 
 def run_parser(args):
@@ -49,6 +59,16 @@ def run_parser(args):
             run_create(args)
         elif args.option == "retry":
             run_retry(args)
+
+    elif args.mode == "expert":
+        if args.option == "list-jobs":
+            list_jobs(args)
+        elif args.option == "change-job-status":
+            change_jobs_status(args)
+        elif args.option == "change-task-status":
+            change_task_status(args)
+        elif args.option == "reset-task":
+            reset_task(args)
 
 def run():
 
