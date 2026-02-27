@@ -48,6 +48,7 @@ class Task:
                      secondary_data : Dict[str, Union[str, Dataset]] = {},
                      binds          : Dict[str, str] = {},
                      envs           : Dict[str, str] = {},
+                     reservation    : str=None, 
             ):
             """
             Initializes a new task with the given parameters.
@@ -103,6 +104,7 @@ class Task:
             ctx.tasks[self.name] = self   
             self.input_data = input_data            
             self.partition = partition
+            self.reservation = reservation
             self.binds = binds
             self._next = []
             self._prev = []
@@ -244,8 +246,8 @@ class Task:
             
             ctx = get_context()
             self._update_jobs()   
-            script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", 
-                            {
+
+            params = {
                                 "ARRAY"         : ",".join( [str(job_id) for job_id in self.get_array_of_jobs_with_status() ]),
                                 "OUTPUT_FILE"   : f"{self.path}/works/job_%a/output.out",
                                 "ERROR_FILE"    : f"{self.path}/works/job_%a/output.err",
@@ -254,7 +256,12 @@ class Task:
                                 #"NTASKS"        : 1,
                                 "EXCLUSIVE"     : True
                                 
-                            })
+                            }
+
+            if self.reservation:
+                params["RESERVATION"] = self.reservation
+
+            script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", params)
             script += f"source {ctx.virtualenv}/bin/activate"
             command = f"maestro run job"
             command+= f" -i {self.path}/jobs/inputs/job_$SLURM_ARRAY_TASK_ID.json"
@@ -287,6 +294,7 @@ class Task:
                 "input_data"        : self.input_data.name,
                 "outputs"           : { key : value.name.replace(self.name+'.',"") for key, value in self.outputs_data.items() },
                 "partition"         : self.partition,
+                "reservation"       : self.reservation,
                 "secondary_data"    : { key : value.name for key, value in self.secondary_data.items() },
                 "binds"             : self.binds,
                 "envs"              : self.envs,
@@ -304,6 +312,7 @@ class Task:
             input_data     = data["input_data"],
             outputs        = data["outputs"],
             partition      = data["partition"],
+            reservation    = data["reservation"],
             secondary_data = data["secondary_data"],
             binds          = data["binds"],
             envs           = data["envs"],

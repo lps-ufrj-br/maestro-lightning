@@ -14,6 +14,7 @@ import tempfile
 
 from loguru import logger
 from tabulate import tabulate
+from typing import Dict
 from maestro_lightning.models import Context, Dataset, Image, Task, State
 from maestro_lightning import get_context, get_hash, setup_logs
 
@@ -22,10 +23,10 @@ from maestro_lightning import get_context, get_hash, setup_logs
 class Flow:
 
     def __init__(self, 
-                 name       : str = "local",
-                 path       : str = f"{os.getcwd()}/tasks",
-                 virtualenv : str=os.environ.get("VIRTUAL_ENV", ""),
-                 level      : str="INFO",
+                 name           : str = "local",
+                 path           : str = f"{os.getcwd()}/tasks",
+                 virtualenv     : str=os.environ.get("VIRTUAL_ENV", ""),
+                 level          : str="INFO",
         ):
             """
             Initializes a new instance of the class.
@@ -51,11 +52,13 @@ class Flow:
             
             self.name = name
             self.path = path
-            self.virtualenv = virtualenv
+            self.extra_params = {
+                "virtualenv": virtualenv,
+            }
             setup_logs( name = f"Flow:{self.name}", level=level )
         
     def __enter__(self):
-        return Session( self.path , virtualenv = self.virtualenv)
+        return Session( self.path , extra_params = self.extra_params)
 
     def __exit__(self, exc_type, exc_value, traceback):
         pass
@@ -63,11 +66,13 @@ class Flow:
 
 class Session:
 
-    def __init__(self, path: str, virtualenv : str=""):
+    def __init__(self, path: str, extra_params : Dict[str,str]):
         self.path = path
         ctx = get_context(clear=True)
         ctx.path = path
-        ctx.virtualenv = virtualenv
+        # decorate context with extra config
+        for key, value in extra_params.items():
+            ctx[key]=value
     
     def mkdir(self):
         logger.info(f"Creating flow directory at {self.path}")
@@ -136,7 +141,7 @@ def dump( ctx : Context, path : str):
             "images":{},
             "tasks":{},
             "path":ctx.path,
-            "virtualenv": ctx.virtualenv
+            "extra_params": ctx.extra_params
         }
         # step 1: dump all datasets which are not from tasks
         for dataset in ctx.datasets.values():
@@ -155,7 +160,7 @@ def load( path : str, ctx : Context):
     with open( path , 'r') as f:
         data = json.load(f)
         ctx.path = data['path']
-        ctx.virtualenv = data['virtualenv']
+        ctx.extra_params = data['extra_params']
         # step 1: load all datasets which are not from tasks
         for dataset in data['datasets'].values():
             Dataset.from_dict( dataset )

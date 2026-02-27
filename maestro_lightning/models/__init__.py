@@ -1,14 +1,21 @@
 __all__ = [ "get_context"]
 
-
+from typing import Dict
 
 class Context:
-    def __init__(self, path : str="", virtualenv : str=""):
+    def __init__(self, path : str="", extra_params : Dict={}):
         self.tasks = {}
         self.datasets = {}
         self.images = {}
         self.path = path
-        self.virtualenv = virtualenv
+        self.extra_params = extra_params
+        
+    def __getitem__(self , name : str):
+        return self.extra_params[name]
+    
+    def __setitem__(self , name : str, value):
+        self.extra_params[name] = value
+        
     def clear(self):
         self.tasks = {}
         self.datasets = {}

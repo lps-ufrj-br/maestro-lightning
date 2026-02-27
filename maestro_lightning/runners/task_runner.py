@@ -27,9 +27,7 @@ def run_init(args):
         "PARTITION"      : "cpu-large",
     }
     
-    if task.status==State.COMPLETED:
-        logger.info(f"Task {task.name} already completed. Skipping initialization.")
-    else:
+    if task.has_jobs():
         logger.info(f"Fetched task {task.name} for initialization.")
         task.status=State.RUNNING  
         # create the main script
@@ -38,6 +36,9 @@ def run_init(args):
             job_id = task.submit(dry_run=args.dry_run)
             logger.info(f"Submitted task {task.name} with job ID {job_id}.")
             slurm_ops["DEPENDENCY"] = f"afterok:{job_id}"
+    else:
+        logger.info(f"Task {task.name} already completed. Skipping initialization.")
+
     
     # create the closing script
     logger.info(f"Creating closing script for task {task.name}.")

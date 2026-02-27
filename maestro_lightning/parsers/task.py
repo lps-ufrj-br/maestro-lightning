@@ -145,9 +145,10 @@ def reset_task( args ):
             row.append(task.status.value)
             rows.append(row)
             logger.info(f"clear job input file in {task.path}/jobs/inputs")
-            os.system(f"rm -rf {task.path}/jobs/inputs/inputs/*")
-            os.system(f"rm -rf {task.path}/jobs/inputs/status/*")
-            os.system(f"rm -rf {task.path}/works/*")
+            os.system(f"rm -rf {task.path}/jobs/inputs/*")
+            os.system(f"rm -rf {task.path}/jobs/status/*")
+            if args.delete_workarea:
+                os.system(f"rm -rf {task.path}/works/*")
 
     cols = ['taskname', 'task_id', 'old_status', 'new_status']
     table = tabulate(rows ,headers=cols, tablefmt="psql")
@@ -233,4 +234,6 @@ def reset_task_parser():
                         help="The ID of the task to be reset.")
     parser.add_argument("--force", action="store_true", dest="force", default=False,
                         help="Force reset even if the task is completed or finalized.")
+    parser.add_argument("--delete-workarea", action="store_true", dest="delete_workarea", default=False,
+                        help="Delete the workarea of the task.")
     return [parser]

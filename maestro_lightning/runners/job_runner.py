@@ -3,6 +3,7 @@ __all__ = []
 import json
 import argparse
 import traceback
+import multiprocessing
 import shutil
 import os, sys
 
@@ -103,7 +104,7 @@ def run_job( args ):
         envs["TF_CPP_MIN_LOG_LEVEL"] = "3"
         envs["CUDA_VISIBLE_ORDER"]   = "PCI_BUS_ID"
         envs["CUDA_VISIBLE_DEVICES"] = os.environ.get("CUDA_VISIBLE_DEVICES","-1")
-        envs["OMP_NUM_THREADS"]      = os.environ.get("SLURM_CPUS_PER_NODE", '4')
+        envs["OMP_NUM_THREADS"]      = str(multiprocessing.cpu_count()) #os.environ.get("SLURM_CPUS_PER_NODE", '1')
         envs["SLURM_CPUS_PER_TASK"]  = envs["OMP_NUM_THREADS"]
         envs["SLURM_MEM_PER_NODE"]   = os.environ.get("SLURM_MEM_PER_NODE", '2048')
         envs.update(job.envs)
