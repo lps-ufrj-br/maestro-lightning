@@ -23,11 +23,11 @@ from maestro_lightning import get_context, get_hash, setup_logs
 class Flow:
 
     def __init__(self, 
-                 name           : str = "local",
+                 name           : str,
                  virtualenv     : str,
                  path           : str = f"{os.getcwd()}/tasks",
                  level          : str="INFO",
-                 partition_for_trigger : str="cpu",
+                 partition      : str="cpu",
         ):
             """
             Initializes a new instance of the class.
@@ -55,7 +55,7 @@ class Flow:
             self.path = path
             self.extra_params = {
                 "virtualenv": virtualenv,
-                "partition_for_trigger": partition_for_trigger
+                "partition": partition
             }
             setup_logs( name = f"Flow:{self.name}", level=level )
         

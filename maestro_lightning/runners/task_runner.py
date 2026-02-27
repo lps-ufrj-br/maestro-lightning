@@ -20,7 +20,7 @@ def run_init(args):
     tasks = {task.task_id: task for task in ctx.tasks.values()}
     task = tasks.get( args.index )
     
-    partition = ctx["partition_for_trigger"]
+    partition = ctx["partition"]
     virtualenv = ctx["virtualenv"]
     slurm_ops = {
         "OUTPUT_FILE"    : f"{task.path}/logs/task_end_{task.task_id}.out",
@@ -91,7 +91,7 @@ def run_next(args):
         logger.info(f"Task {task.name} finalized successfully.")
         # need to start the other tasks that depend on this one
         for task in task.next:
-            partition = ctx["partition_for_trigger"]
+            partition = ctx["partition"]
             virtualenv = ctx["virtualenv"]  
             slurm_opts = {
                         "OUTPUT_FILE"    : f"{task.path}/logs/task_begin_{task.task_id}.out",
