@@ -261,8 +261,8 @@ class Task:
             if self.reservation:
                 params["RESERVATION"] = self.reservation
 
-            script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", params)
-            script += f"source {ctx.virtualenv}/bin/activate"
+            virtualenv = ctx["virtualenv"]
+            script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", opts=params, virtualenv=virtualenv)
             command = f"maestro run job"
             command+= f" -i {self.path}/jobs/inputs/job_$SLURM_ARRAY_TASK_ID.json"
             command+= f" -o {self.path}/works/job_$SLURM_ARRAY_TASK_ID"

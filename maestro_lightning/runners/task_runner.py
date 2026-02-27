@@ -42,7 +42,7 @@ def run_init(args):
     
     # create the closing script
     logger.info(f"Creating closing script for task {task.name}.")
-    script = sbatch( f"{task.path}/scripts/close_task_{task.task_id}.sh", opts=slurm_ops , virtualenv=ctx.virtualenv )    
+    script = sbatch( f"{task.path}/scripts/close_task_{task.task_id}.sh", opts=slurm_ops , virtualenv=ctx["virtualenv"])    
     command = f"maestro run next -t {ctx.path}/flow.json -i {task.task_id}"
     script += command
     logger.info(f"Submitting closing script for task {task.name}.")
@@ -97,7 +97,7 @@ def run_next(args):
 
                         }
             logger.info(f"Starting dependent task {task.name}.")
-            script = sbatch( f"{task.path}/scripts/init_task_{task.task_id}.sh", opts = slurm_opts , virtualenv=ctx.virtualenv)
+            script = sbatch( f"{task.path}/scripts/init_task_{task.task_id}.sh", opts = slurm_opts , virtualenv=ctx["virtualenv"])
             command = f"maestro run task -t {ctx.path}/flow.json -i {task.task_id}"
             script += command
             print(command)
