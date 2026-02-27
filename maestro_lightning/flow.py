@@ -24,9 +24,10 @@ class Flow:
 
     def __init__(self, 
                  name           : str = "local",
+                 virtualenv     : str,
                  path           : str = f"{os.getcwd()}/tasks",
-                 virtualenv     : str=os.environ.get("VIRTUAL_ENV", ""),
                  level          : str="INFO",
+                 partition_for_trigger : str="cpu",
         ):
             """
             Initializes a new instance of the class.
@@ -54,6 +55,7 @@ class Flow:
             self.path = path
             self.extra_params = {
                 "virtualenv": virtualenv,
+                "partition_for_trigger": partition_for_trigger
             }
             setup_logs( name = f"Flow:{self.name}", level=level )
         
