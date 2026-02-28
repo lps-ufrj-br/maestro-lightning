@@ -37,7 +37,7 @@ with Flow(name="mc25_13TeV.20251215.physics_Main.Zee.500k", path=f"{basepath}/mc
     image            = Image(name="lorenzetti", path=image_path)
     partitions       = 'gpu,cpu-large,gpu-large'
 
-    pre_exec = f"source {repo_build_path}/lzt_setup.sh && export OMP_NUM_THREADS=10 && python -c 'import joblib; print(joblib.cpu_count())'"
+    pre_exec = f"source {repo_build_path}/lzt_setup.sh"
 
     command = f"{pre_exec} && gen_zee.py -o %OUT --job-file %IN -m"
 
@@ -60,7 +60,7 @@ with Flow(name="mc25_13TeV.20251215.physics_Main.Zee.500k", path=f"{basepath}/mc
                   binds=binds)
     
     
-    command = f"{pre_exec} && digit_trf.py -i %IN -o %OUT -nt 10 --event-per-job 100"
+    command = f"{pre_exec} && digit_trf.py -i %IN -o %OUT -nt 10 --events-per-job 100 -m"
     task_3 = Task(name="mc25_13TeV.20251215.physics_Main.Zee.500k.ESD",
                   image=image,
                   command=command,
@@ -69,7 +69,7 @@ with Flow(name="mc25_13TeV.20251215.physics_Main.Zee.500k", path=f"{basepath}/mc
                   partition=partitions,
                   binds=binds)
     
-    command = f"{pre_exec} && reco_trf.py -i %IN -o %OUT -nt 10 --events-per-job 100"
+    command = f"{pre_exec} && reco_trf.py -i %IN -o %OUT -nt 10 --events-per-job 100 -m"
     task_4 = Task(name="mc25_13TeV.20251215.physics_Main.Zee.500k.AOD",
                   image=image,
                   command=command,
@@ -78,7 +78,7 @@ with Flow(name="mc25_13TeV.20251215.physics_Main.Zee.500k", path=f"{basepath}/mc
                   partition=partitions,
                   binds=binds)
     
-    command = f"{pre_exec} && ntuple_trf.py -i %IN -o %OUT -nt 10 --events-per-job 100"
+    command = f"{pre_exec} && ntuple_trf.py -i %IN -o %OUT -nt 10 --events-per-job 100 -m"
     task_5 = Task(name="mc25_13TeV.20251215.physics_Main.Zee.500k.NTUPLE",
                   image=image,
                   command=command,

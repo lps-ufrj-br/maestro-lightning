@@ -11,8 +11,9 @@ for i in range(2):
         json.dump(d,f)
 
 
+virtualenv=os.environ.get("VIRTUALENV_PATH",None)
 
-with Flow(name="local_provider", path=f"{basepath}/local_tasks") as session:
+with Flow(name="local_provider", path=f"{basepath}/local_tasks", virtualenv = virtualenv) as session:
 
 
     input_dataset_1  = Dataset(name="jobs", path=f"{basepath}/jobs")

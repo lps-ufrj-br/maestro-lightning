@@ -47,5 +47,5 @@ with Flow(name="local_provider", path=f"{basepath}/local_tasks") as session:
     #              partition='gpu',
     #              binds=binds)
    
-    session.run()
+    session.run( dry_run=True)
     
