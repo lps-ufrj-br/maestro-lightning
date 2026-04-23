@@ -2,19 +2,8 @@
 [![maestro](https://github.com/lps-ufrj-br/maestro-lightning/actions/workflows/flow.yml/badge.svg)](https://github.com/lps-ufrj-br/maestro-lightning/actions/workflows/flow.yml)
 [![pages](https://github.com/lps-ufrj-br/maestro-lightning/actions/workflows/pages.yml/badge.svg)](https://github.com/lps-ufrj-br/maestro-lightning/actions/workflows/pages.yml)
 
-# Maestro Lightning ([WebPage](https://lps-ufrj-br.github.io/maestro-lightning/))🚀
+# Maestro Lightning 🚀
 
-## 🧪 CI Status
-
-| Test Job | Target | Status |
-| :--- | :--- | :--- |
-| **Environment** | Python Build & Setup | ![Build](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/flow.yml?job=build&label=build&branch=main) |
-| **Flow** | Maestro Flow Test | ![Flow](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/flow.yml?job=flow&label=flow&branch=main) |
-| **Task 1** | Creation & Run | ![Task 1](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/flow.yml?job=run_task_one&label=task1&branch=main) |
-| **Task 2** | Creation & Run | ![Task 2](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/flow.yml?job=run_task_two&label=task2&branch=main) |
-| **Documentation** | GitHub Pages Build | ![Pages](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/pages.yml?job=build&label=pages&branch=main) |
-
----
 
 Maestro Lightning is a repository to manage workloads and jobs in SLURM using a Pythonic approach. 
 
@@ -29,6 +18,17 @@ Maestro Lightning is a repository to manage workloads and jobs in SLURM using a 
 - SLURM cluster
 - Singularity
 - Virtual environment
+
+## 🧪 CI Status
+
+| Test Job | Target | Status |
+| :--- | :--- | :--- |
+| **Environment** | Python Build & Setup | ![Build](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/flow.yml?job=build&label=build&branch=main) |
+| **Flow** | Maestro Flow Test | ![Flow](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/flow.yml?job=flow&label=flow&branch=main) |
+| **Task 1** | Creation & Run | ![Task 1](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/flow.yml?job=run_task_one&label=task1&branch=main) |
+| **Task 2** | Creation & Run | ![Task 2](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/flow.yml?job=run_task_two&label=task2&branch=main) |
+| **Documentation** | GitHub Pages Build | ![Pages](https://img.shields.io/github/actions/workflow/status/lps-ufrj-br/maestro-lightning/pages.yml?job=build&label=pages&branch=main) |
+
 
 ## Installation 📦
 
