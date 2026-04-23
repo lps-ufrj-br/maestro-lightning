@@ -263,14 +263,11 @@ class Task:
             virtualenv = ctx["virtualenv"]
             condaenv   = ctx["condaenv"]
 
-            script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", opts=params )
-            if condaenv:
-                logger.info(f"Activating conda environment: {condaenv}")
-                script += f"conda activate {condaenv}"
-            if virtualenv:
-                logger.info(f"Activating virtual environment: {virtualenv}")
-                script += f"source {virtualenv}/bin/activate"
-
+            script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", 
+                             opts=params, 
+                             virtualenv=virtualenv, 
+                             condaenv=condaenv
+                            )
             command = f"maestro run job"
             command+= f" -i {self.path}/jobs/inputs/job_$SLURM_ARRAY_TASK_ID.json"
             command+= f" -o {self.path}/works/job_$SLURM_ARRAY_TASK_ID"

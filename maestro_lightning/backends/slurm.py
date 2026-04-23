@@ -74,6 +74,8 @@ class sbatch:
     def __init__(self, 
                  path : str,
                  opts : Dict[str, Any] = {},
+                 virtualenv : str = os.environ.get("VIRTUAL_ENV", None),
+                 condaenv : str = os.environ.get("CONDA_ENV_NAME", None),
             ):
             """
             Initializes a Slurm batch script with specified options.
@@ -99,6 +101,10 @@ class sbatch:
                 logger.info(f"Adding SLURM option: {key} with value: {value}")
                 self.lines.append( f"#SBATCH {value}" )
                 
+            if virtualenv:
+                self.lines.append( f"source {virtualenv}/bin/activate" )
+            if condaenv:
+                self.lines.append( f"conda activate {condaenv}" )
 
 
     def __add__(self, line : str):

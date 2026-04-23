@@ -22,6 +22,7 @@ def run_init(args):
     
     partition = ctx["partition"]
     virtualenv = ctx["virtualenv"]
+    condaenv   = ctx["condaenv"]
     slurm_ops = {
         "OUTPUT_FILE"    : f"{task.path}/logs/task_end_{task.task_id}.out",
         "ERROR_FILE"     : f"{task.path}/logs/task_end_{task.task_id}.err",
@@ -44,7 +45,11 @@ def run_init(args):
     
     # create the closing script
     logger.info(f"Creating closing script for task {task.name}.")
-    script = sbatch( f"{task.path}/scripts/close_task_{task.task_id}.sh", opts=slurm_ops , virtualenv=virtualenv)    
+    script = sbatch( f"{task.path}/scripts/close_task_{task.task_id}.sh", 
+                     opts=slurm_ops , 
+                     virtualenv=virtualenv, 
+                     condaenv=condaenv
+                    )    
     command = f"maestro run next -t {ctx.path}/flow.json -i {task.task_id}"
     script += command
     logger.info(f"Submitting closing script for task {task.name}.")
@@ -93,6 +98,7 @@ def run_next(args):
         for task in task.next:
             partition = ctx["partition"]
             virtualenv = ctx["virtualenv"]  
+            condaenv   = ctx["condaenv"]
             slurm_opts = {
                         "OUTPUT_FILE"    : f"{task.path}/logs/task_begin_{task.task_id}.out",
                         "ERROR_FILE"     : f"{task.path}/logs/task_begin_{task.task_id}.err",
@@ -101,7 +107,11 @@ def run_next(args):
 
                         }
             logger.info(f"Starting dependent task {task.name}.")
-            script = sbatch( f"{task.path}/scripts/init_task_{task.task_id}.sh", opts = slurm_opts , virtualenv=virtualenv)
+            script = sbatch( f"{task.path}/scripts/init_task_{task.task_id}.sh", 
+                             opts = slurm_opts , 
+                             virtualenv=virtualenv, 
+                             condaenv=condaenv
+                            )
             command = f"maestro run task -t {ctx.path}/flow.json -i {task.task_id}"
             script += command
             print(command)
