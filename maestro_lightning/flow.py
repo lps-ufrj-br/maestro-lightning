@@ -24,7 +24,8 @@ class Flow:
 
     def __init__(self, 
                  name           : str,
-                 virtualenv     : str,
+                 virtualenv     : str = os.environ.get("VIRTUAL_ENV", None),
+                 condaenv       : str = os.environ.get("CONDA_ENV_NAME", None),
                  path           : str = f"{os.getcwd()}/tasks",
                  level          : str="INFO",
                  partition      : str="cpu",
@@ -55,6 +56,7 @@ class Flow:
             self.path = path
             self.extra_params = {
                 "virtualenv": virtualenv,
+                "condaenv": condaenv,
                 "partition": partition
             }
             setup_logs( name = f"Flow:{self.name}", level=level )

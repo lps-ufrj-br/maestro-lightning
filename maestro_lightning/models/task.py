@@ -255,14 +255,22 @@ class Task:
                                 "JOB_NAME"      : f"run-{self.task_id}",
                                 #"NTASKS"        : 1,
                                 "EXCLUSIVE"     : True
-                                
                             }
 
             if self.reservation:
                 params["RESERVATION"] = self.reservation
 
             virtualenv = ctx["virtualenv"]
-            script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", opts=params, virtualenv=virtualenv)
+            condaenv   = ctx["condaenv"]
+
+            script = sbatch( f"{self.path}/scripts/run_task_{self.task_id}.sh", opts=params )
+            if condaenv:
+                logger.info(f"Activating conda environment: {condaenv}")
+                script += f"conda activate {condaenv}"
+            if virtualenv:
+                logger.info(f"Activating virtual environment: {virtualenv}")
+                script += f"source {virtualenv}/bin/activate"
+
             command = f"maestro run job"
             command+= f" -i {self.path}/jobs/inputs/job_$SLURM_ARRAY_TASK_ID.json"
             command+= f" -o {self.path}/works/job_$SLURM_ARRAY_TASK_ID"
