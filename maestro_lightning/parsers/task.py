@@ -124,10 +124,10 @@ def list_jobs(
 @expert_app.command("change-jobs-status")
 def change_jobs_status(
     input_file      : Annotated[str, typer.Option("--input", "-i", help="The job input file")],
-    message_level   : Annotated[str, typer.Option("--message-level", help="Set the logging level")] = "ERROR",
     task_id         : Annotated[int, typer.Option("--task-id", help="The ID of the task to change the job status.")],
     from_status     : Annotated[str, typer.Option("--from-status", "-f", help="The current status of the job to be changed.")],
-    to_status       : Annotated[str, typer.Option("--to-status", "-t", help="The new status to set for the job.")]
+    to_status       : Annotated[str, typer.Option("--to-status", "-t", help="The new status to set for the job.")],
+    message_level   : Annotated[str, typer.Option("--message-level", help="Set the logging level")] = "ERROR",
 ):
     """
     Change the status of jobs in a task.
@@ -149,9 +149,9 @@ def change_jobs_status(
 @expert_app.command("change-task-status")
 def change_task_status(
     input_file      : Annotated[str, typer.Option("--input", "-i", help="The job input file")],
-    message_level   : Annotated[str, typer.Option("--message-level", help="Set the logging level")] = "ERROR",
     task_id         : Annotated[int, typer.Option("--task-id", help="The ID of the task to change the status.")],
-    new_status      : Annotated[str, typer.Option("--new-status", help="The new status to set for the task.")]
+    new_status      : Annotated[str, typer.Option("--new-status", help="The new status to set for the task.")],
+    message_level   : Annotated[str, typer.Option("--message-level", help="Set the logging level")] = "ERROR"
 ):
     """
     Change the status of a task.
@@ -171,10 +171,10 @@ def change_task_status(
 @expert_app.command("reset-task")
 def reset_task(
     input_file      : Annotated[str, typer.Option("--input", "-i", help="The job input file")],
-    message_level   : Annotated[str, typer.Option("--message-level", help="Set the logging level")] = "ERROR",
     task_id         : Annotated[int, typer.Option("--task-id", help="The ID of the task to be reset.")],
     force           : Annotated[bool, typer.Option("--force", help="Force reset even if the task is completed or finalized.")] = False,
-    delete_workarea : Annotated[bool, typer.Option("--delete-workarea", help="Delete the workarea of the task.")] = False
+    delete_workarea : Annotated[bool, typer.Option("--delete-workarea", help="Delete the workarea of the task.")] = False,
+    message_level   : Annotated[str, typer.Option("--message-level", help="Set the logging level")] = "ERROR"
 ):
     """
     Reset a task and its jobs.
