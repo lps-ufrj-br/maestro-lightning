@@ -7,3 +7,5 @@ rich_argparse
 tabulate
 expand_folders
 filelock
+typer
+typing_extensions
