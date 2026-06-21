@@ -2,6 +2,7 @@ __all__ = []
 
 import json
 import argparse
+import typer
 import traceback
 import multiprocessing
 import shutil
@@ -17,13 +18,17 @@ from maestro_lightning import Job, State
 
          
          
-def run_job( args ):
+def run_job(
+    input: str = typer.Option(..., "-i", "--input", help="The job input file"),
+    output: str = typer.Option("circuit.json", "-o", "--output", help="The job output"),
+    message_level: str = typer.Option("INFO", "-m", "--message-level", help="The job message level (DEBUG, INFO, WARNING, ERROR)"),
+):
 
-    setup_logs( name = f"job_runner", level=args.message_level )
-    workarea = args.output
+    setup_logs( name = f"job_runner", level=message_level )
+    workarea = output
 
-    logger.info(f"loaded job from input file {args.input}.")
-    with open ( args.input , 'r') as f:    
+    logger.info(f"loaded job from input file {input}.")
+    with open ( input , 'r') as f:    
         job = Job.from_dict( json.load(f) )
         
     logger.info(f"job id: {job.job_id}")
@@ -157,20 +162,7 @@ def run_job( args ):
 
 
 
-#
-# args 
-#
-def job_parser():
-    parser = argparse.ArgumentParser(description = '', add_help = False)
-
-    parser.add_argument('-i','--input', action='store', dest='input', required = True,
-                        help = "The job input file")
-    parser.add_argument('-o','--output', action='store', dest='output', required = False, default='circuit.json',
-                        help = "The job output")
-    parser.add_argument('-m','--message-level', action='store', dest='message_level', required = False, default='INFO',
-                        help = "The job message level (DEBUG, INFO, WARNING, ERROR)")
-
-    return [parser]
+# No longer using job_parser since it's converted to typer. Option definition is inside run_job function signature.
     
     
 

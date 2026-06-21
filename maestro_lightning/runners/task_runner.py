@@ -1,6 +1,7 @@
 __all__ = []
 
 import argparse
+import typer
 
 from loguru import logger
 from maestro_lightning import State, get_context, get_argparser_formatter 
@@ -10,15 +11,20 @@ from maestro_lightning.models import Task
 
 
 
-def run_init(args):
+def run_init(
+    index: int = typer.Option(..., "-i", "--index", help="The task index"),
+    task_file: str = typer.Option(..., "-t", "--task-file", help="The task file input"),
+    message_level: str = typer.Option("INFO", "--message-level", help="The logging message level"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Perform a dry run without executing any tasks."),
+):
     
-    setup_logs( name = f"task_runner:{args.index}", level=args.message_level )
+    setup_logs( name = f"task_runner:{index}", level=message_level )
     ctx = get_context( clear=True )
-    logger.info(f"Initializing task with index {args.index}.")
-    logger.info(f"Loading task file {args.task_file}.")
-    load( args.task_file , ctx)
+    logger.info(f"Initializing task with index {index}.")
+    logger.info(f"Loading task file {task_file}.")
+    load( task_file , ctx)
     tasks = {task.task_id: task for task in ctx.tasks.values()}
-    task = tasks.get( args.index )
+    task = tasks.get( index )
     
     partition = ctx["partition"]
     virtualenv = ctx["virtualenv"]
@@ -36,7 +42,7 @@ def run_init(args):
         # create the main script
         logger.info(f"Submitting main script for task {task.name}.")
         if task.has_jobs():
-            job_id = task.submit(dry_run=args.dry_run)
+            job_id = task.submit(dry_run=dry_run)
             logger.info(f"Submitted task {task.name} with job ID {job_id}.")
             slurm_ops["DEPENDENCY"] = f"afterok:{job_id}"
     else:
@@ -54,20 +60,25 @@ def run_init(args):
     script += command
     logger.info(f"Submitting closing script for task {task.name}.")
     print(command)
-    if not args.dry_run:
+    if not dry_run:
         script.submit()
         
     
 
-def run_next(args):
+def run_next(
+    index: int = typer.Option(..., "-i", "--index", help="The task index"),
+    task_file: str = typer.Option(..., "-t", "--task-file", help="The task file input"),
+    message_level: str = typer.Option("INFO", "--message-level", help="The logging message level"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Perform a dry run without executing any tasks."),
+):
     
-    setup_logs( name = f"TaskCloser:{args.index}", level=args.message_level )
+    setup_logs( name = f"TaskCloser:{index}", level=message_level )
     ctx = get_context( clear=True )
-    logger.info(f"Finalizing task with index {args.index}.")
-    logger.info(f"Loading task file {args.task_file}.")
-    load( args.task_file , ctx)
+    logger.info(f"Finalizing task with index {index}.")
+    logger.info(f"Loading task file {task_file}.")
+    load( task_file , ctx)
     tasks = {task.task_id: task for task in ctx.tasks.values()}
-    task = tasks.get( args.index )
+    task = tasks.get( index )
     logger.info(f"Fetched task {task.name} for finalization.")
     
     # update task status 
@@ -85,7 +96,7 @@ def run_next(args):
                 next_task.status = State.CANCELED
                 cancel_task( next_task )
         logger.info(f"Task {task.name} failed. Canceling dependent tasks.")
-        if not args.dry_run:
+        if not dry_run:
             cancel_task( task )      
     else:
         logger.info(f"Some jobs for task {task.name} failed, but within acceptable limits.")
@@ -116,21 +127,11 @@ def run_next(args):
             script += command
             print(command)
             logger.info(f"Submitting initialization script for task {task.name}.")
-            if not args.dry_run:
+            if not dry_run:
                 script.submit()
     
 
-def task_parser():
-    parser = argparse.ArgumentParser(description = '', add_help = False)
-    parser.add_argument('-i','--index', action='store', dest='index', required = True,
-                        help = "The task index", type=int)   
-    parser.add_argument('-t', '--task-file', action='store', dest='task_file', required=True,
-                        help="The task file input")
-    parser.add_argument('--message-level', action='store', dest='message_level', required=False,
-                        help="The logging message level", default="INFO", choices=["DEBUG","INFO","WARNING","ERROR","CRITICAL"])
-    parser.add_argument('--dry-run', action='store_true', dest='dry_run', required=False,
-                        help="Perform a dry run without executing any tasks.")
-    return [parser]
+# No longer using task_parser since it's converted to typer. Option definition is inside function signatures.
 
 
 
