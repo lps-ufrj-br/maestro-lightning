@@ -8,7 +8,4 @@ tabulate
 expand_folders
 filelock
 typer
-<<<<<<< HEAD
-=======
 typing_extensions
->>>>>>> e7bb121c73431211c9255ae8b6bb53b0a8c30382
