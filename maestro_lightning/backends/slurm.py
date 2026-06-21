@@ -104,7 +104,7 @@ class sbatch:
             if virtualenv:
                 self.lines.append( f"source {virtualenv}/bin/activate" )
             if condaenv:
-                self.lines.append( f"conda activate {condaenv}" )
+                self.lines.append( f"conda init && conda activate {condaenv}" )
 
 
     def __add__(self, line : str):
