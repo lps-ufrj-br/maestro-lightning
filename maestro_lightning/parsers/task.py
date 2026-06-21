@@ -138,11 +138,7 @@ def change_jobs_status(
         if task.task_id == task_id:
             for job in task.jobs:
                 if job.status.value == from_status:
-<<<<<<< HEAD
-                    row = [task.name, task.task_id ,job.job_id, job.status.value]
-=======
                     row = [task.name, task.task_id, job.job_id, job.status.value]
->>>>>>> e7bb121c73431211c9255ae8b6bb53b0a8c30382
                     job.status = State(to_status)
                     row.append(job.status.value)
                     rows.append(row)
